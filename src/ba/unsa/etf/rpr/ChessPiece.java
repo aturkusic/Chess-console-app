@@ -3,14 +3,14 @@ package ba.unsa.etf.rpr;
 import static ba.unsa.etf.rpr.Main.daLiJeIspravnaPozicija;
 
 public abstract class ChessPiece {
-    protected String position;
-    protected Color color;
+    protected String pozicija;
+    protected Color boja;
     public ChessPiece(String poz, Color col) {
-        if(daLiJeIspravnaPozicija(poz)) throw new IllegalArgumentException("Losa pozicija");
-        position = poz; color = col;
+        if(!daLiJeIspravnaPozicija(poz)) throw new IllegalArgumentException("Losa pozicija");
+        pozicija = poz; boja = col;
     }
     public static enum Color{BLACK, WHITE}
-    public String getPosition() { return position; }
-    public Color getColor() { return color; }
-    public abstract void move(String position);
+    public String getPosition() { return pozicija; }
+    public Color getColor() { return boja; }
+    public abstract void move(String position) throws IllegalChessMoveException;
 }
