@@ -11,6 +11,9 @@ public class Main {
          return true;
      }
      public static void main(String[] args) {
+        King kralj = new King("H3", ChessPiece.Color.WHITE);
+        Queen kraljica = new Queen("B4", ChessPiece.Color.BLACK);
 
+        System.out.print(kralj.getPosition() + " " + kraljica.getPosition());
     }
 }
