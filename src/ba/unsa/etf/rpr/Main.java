@@ -13,12 +13,15 @@ public class Main {
      public static void main(String[] args) {
         King kralj = new King("H3", ChessPiece.Color.WHITE);
         Queen kraljica = new Queen("D4", ChessPiece.Color.BLACK);
+        Knight konj = new Knight("C4", ChessPiece.Color.BLACK);
         try {
-            kraljica.move("D4");
-           // kralj.move("h4");
+            kraljica.move("C3");
+            kralj.move("h4");
+            konj.move("b2");
         } catch (IllegalChessMoveException izuzetak) {
             System.out.print("Bacen je izuzetak");
         }
         System.out.print(kralj.getPosition() + " " + kraljica.getPosition());
-    }
+
+     }
 }
