@@ -12,9 +12,10 @@ public class Main {
      }
      public static void main(String[] args) {
         King kralj = new King("H3", ChessPiece.Color.WHITE);
-        Queen kraljica = new Queen("B4", ChessPiece.Color.BLACK);
+        Queen kraljica = new Queen("D4", ChessPiece.Color.BLACK);
         try {
-            kralj.move("A4");
+            kraljica.move("D4");
+           // kralj.move("h4");
         } catch (IllegalChessMoveException izuzetak) {
             System.out.print("Bacen je izuzetak");
         }
