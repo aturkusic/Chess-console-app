@@ -65,10 +65,9 @@ public class Board {
                             } catch (IllegalChessMoveException izuz) {
                                 throw izuz;
                             }
-
                         }
                     }
-                }
+                } // ako nije pronadjen nijedan element na position onda je slobodno i pomjeramo kralja
                 if(!pronadjen) {
                     try {
                         for (int j = 0; j < tabla.size(); j++) {
@@ -81,11 +80,45 @@ public class Board {
                         throw izuz;
                     }
                 }
-            } /*else if(type.isInstance(Pawn)) {
+            } else if(type == Knight.class) {
+            boolean pronadjen = false;
+            for(int i = 0; i < tabla.size(); i++) { // trazimo da li ima figura na novoj poziciji, zatim da li je potez leglan i konacno da li izbacujemo figuru sa tog mjesta ili izuzetak
+                String stara_poz = tabla.get(i).getPosition().toUpperCase();
+                if (stara_poz.equals(poz)) {
+                    if (tabla.get(i).getColor() == color) throw new IllegalChessMoveException("illegalan potez");
+                    else {
+                        try {
+                            for (int j = 0; j < tabla.size(); j++) {
+                                if (tabla.get(j) instanceof Knight && tabla.get(j).getColor() == color) {
+                                    tabla.get(j).move(position);
+                                    break;
+                                }
+                            }
+                            tabla.remove(i);
+                            pronadjen = true;
+                            break;
+                        } catch (IllegalChessMoveException izuz) {
+                            throw izuz;
+                        }
+                    }
+                }
+            } // ako nije pronadjen nijedan element na position onda je slobodno i pomjeramo kralja
+            if(!pronadjen) {
+                try {
+                    for (int j = 0; j < tabla.size(); j++) {
+                        if (tabla.get(j) instanceof Knight && tabla.get(j).getColor() == color) {
+                            tabla.get(j).move(position);
+                            break;
+                        }
+                    }
+                } catch (IllegalChessMoveException izuz) {
+                    throw izuz;
+                }
+            }
 
-            } else if(type.isInstance(Knight)) {
+            } /*else if(type.isInstance(Bishop)) {
 
-            } else if(type.isInstance(Bishop)) {
+            } else if(type.isInstance(Pawn)) {
 
             } else if(type.isInstance(Queen)) {
 
