@@ -3,6 +3,8 @@ package ba.unsa.etf.rpr;
 
 import java.util.ArrayList;
 
+import static ba.unsa.etf.rpr.Main.daLiJeIspravnaPozicija;
+
 public class Board {
     private ArrayList<ChessPiece> tabla;
 
@@ -41,36 +43,41 @@ public class Board {
     }
 
     public void move(ChessPiece type, ChessPiece.Color color, String position) throws IllegalChessMoveException {
-        String tmp = position.toUpperCase();
+        String poz = position.toUpperCase();
             if(type instanceof King) {
-                for(int i = 0; i < tabla.size(); i++) {
-                    String tmp1 = tabla.get(i).getPosition().toUpperCase();
-                    if(tmp1.equals(tmp) && tabla.get(i).getColor() == color) throw new IllegalChessMoveException("Illegalan potez");
-                    else if(tmp1.equals(tmp)){
-                        for(int k = 0; k < tabla.size(); k++) {
-                            if(tabla.get(k) instanceof King &&  tabla.get(k).getColor() == color) {
-                                try {
-                                    tabla.get(k).move(tmp);
-                                    int brojac = 0;
-                                    for(int j = 0; j < tabla.size(); j++) {
-                                        if(tmp1.equals(tmp)) brojac = j;
+                boolean pronadjen = false;
+                for(int i = 0; i < tabla.size(); i++) { // trazimo da li ima figura na novoj poziciji, zatim da li je potez leglan i konacno da li izbacujemo figuru sa tog mjesta ili izuzetak
+                    String stara_poz = tabla.get(i).getPosition().toUpperCase();
+                    if (stara_poz.equals(poz)) {
+                        if (tabla.get(i).getColor() == color) throw new IllegalChessMoveException("illegalan potez");
+                        else {
+                            try {
+                                for (int j = 0; j < tabla.size(); j++) {
+                                    if (tabla.get(j) instanceof King && tabla.get(j).getColor() == color) {
+                                        tabla.get(j).move(position);
+                                        break;
                                     }
-                                    tabla.remove(brojac);
-                                } catch(IllegalChessMoveException izuz) {
-                                    throw izuz;
                                 }
+                                tabla.remove(i);
+                                pronadjen = true;
+                                break;
+                            } catch (IllegalChessMoveException izuz) {
+                                throw izuz;
                             }
-                        }
-                    } else {
-                        for(int k = 0; k < tabla.size(); k++) {
-                            if (tabla.get(k) instanceof King &&  tabla.get(k).getColor() == color)
-                                try {
-                                    tabla.get(k).move(tmp);
-                                } catch(IllegalChessMoveException izuz) {
-                                    throw izuz;
-                                }
 
                         }
+                    }
+                }
+                if(!pronadjen) {
+                    try {
+                        for (int j = 0; j < tabla.size(); j++) {
+                            if (tabla.get(j) instanceof King && tabla.get(j).getColor() == color) {
+                                tabla.get(j).move(position);
+                                break;
+                            }
+                        }
+                    } catch (IllegalChessMoveException izuz) {
+                        throw izuz;
                     }
                 }
             } /*else if(type.isInstance(Pawn)) {
