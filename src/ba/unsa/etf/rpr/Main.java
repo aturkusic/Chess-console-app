@@ -15,15 +15,17 @@ public class Main {
         Queen kraljica = new Queen("D4", ChessPiece.Color.BLACK);
         Knight konj = new Knight("D4", ChessPiece.Color.BLACK);
         Bishop lovac = new Bishop("E5", ChessPiece.Color.WHITE);
+        ChessPiece pijun = new Pawn("e7", ChessPiece.Color.BLACK);
         try {
             kraljica.move("C3");
             kralj.move("h4");
             konj.move("e6");
             lovac.move("C3");
+            pijun.move("E6");
         } catch (IllegalChessMoveException izuzetak) {
             System.out.print("Bacen je izuzetak");
         }
-        System.out.print(kralj.getPosition() + " " + kraljica.getPosition() + " " + konj.getPosition()+ " " + lovac.getPosition());
+        System.out.print(kralj.getPosition() + " " + kraljica.getPosition() + " " + konj.getPosition()+ " " + lovac.getPosition()+ " " + pijun.getPosition());
 
      }
 }
