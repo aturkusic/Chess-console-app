@@ -12,6 +12,7 @@ public class Bishop extends ChessPiece {
         String pozTmp = pozicija.toUpperCase();
         if(!daLiJeIspravnaPozicija(position)) throw new IllegalArgumentException("Nepostojeca pozicija");
         if((abs(pozTmp.charAt(0) - tmp.charAt(0)) != abs(pozTmp.charAt(1) - tmp.charAt(1)))) throw new IllegalChessMoveException("Lovac ne moze na tu poziciju");
+        else if(tmp.equals(pozTmp)) throw new IllegalChessMoveException("Niste nista pomjerili");
         pozicija = position;
         return true;
     }

@@ -9,6 +9,7 @@ public class Board {
     private ArrayList<ChessPiece> tabla;
 
     public Board() {
+        tabla = new ArrayList<>();
         tabla.add(new Rook("A1", ChessPiece.Color.WHITE));
         tabla.add(new Knight("B1", ChessPiece.Color.WHITE));
         tabla.add(new Bishop("C1", ChessPiece.Color.WHITE));
@@ -42,9 +43,9 @@ public class Board {
         tabla.add(new Pawn("H7", ChessPiece.Color.BLACK));
     }
 
-    public void move(ChessPiece type, ChessPiece.Color color, String position) throws IllegalChessMoveException {
+    public void move(Class type, ChessPiece.Color color, String position) throws IllegalChessMoveException {
         String poz = position.toUpperCase();
-            if(type instanceof King) {
+            if(type == King.class) {
                 boolean pronadjen = false;
                 for(int i = 0; i < tabla.size(); i++) { // trazimo da li ima figura na novoj poziciji, zatim da li je potez leglan i konacno da li izbacujemo figuru sa tog mjesta ili izuzetak
                     String stara_poz = tabla.get(i).getPosition().toUpperCase();
