@@ -20,9 +20,9 @@ public class Board {
         tabla.add(new Knight("G1", ChessPiece.Color.WHITE));
         tabla.add(new Rook("H1", ChessPiece.Color.WHITE));
         tabla.add(new Pawn("A2", ChessPiece.Color.WHITE));
-        //tabla.add(new Pawn("B2", ChessPiece.Color.WHITE));
+        tabla.add(new Pawn("B2", ChessPiece.Color.WHITE));
         tabla.add(new Pawn("C2", ChessPiece.Color.WHITE));
-        tabla.add(new Pawn("D2", ChessPiece.Color.WHITE));
+        //tabla.add(new Pawn("D2", ChessPiece.Color.WHITE));
         tabla.add(new Pawn("E2", ChessPiece.Color.WHITE));
         tabla.add(new Pawn("F2", ChessPiece.Color.WHITE));
         tabla.add(new Pawn("G2", ChessPiece.Color.WHITE));
@@ -133,7 +133,7 @@ public class Board {
                 else if(stara_poz.charAt(0) < poz.charAt(0) && stara_poz.charAt(1) < poz.charAt(1)) { prvi = 1; drugi = 1;}
                 else { prvi = 1; drugi = -1; }
                 // uslovi za provjeru preskakanja, provjeravanje moze biti u 4 smjera pa po tome ova 4 ifa iznad
-            vanjska :  while(true) {
+            vanjska : while(true) {
                         for (int i = 0; i < tabla.size(); i++) {
                             String tmp = tabla.get(i).getPosition().toUpperCase();
                             if (tmp.charAt(0) == stara_poz.charAt(0) + prvi && tmp.charAt(1) == (stara_poz.charAt(1) + drugi)) {
@@ -151,8 +151,9 @@ public class Board {
                             else if(stara_poz.charAt(0) < poz.charAt(0) && stara_poz.charAt(1) < poz.charAt(1)) { prvi++; drugi++;}
                             else { prvi++; drugi--; }
                             limit++;
-                            if(limit > abs(poz.charAt(0) - stara_poz.charAt(0))) break;
-                        }
+                            if(limit == abs(poz.charAt(0) - stara_poz.charAt(0))) break;
+
+                    }
                 try {
                     tabla.get(index).move(position);
                 } catch (IllegalChessMoveException izuz) {
@@ -190,6 +191,7 @@ public class Board {
                      else if(stara_poz.charAt(1) > poz.charAt(1)) prvi--;
                      else if(stara_poz.charAt(0) < poz.charAt(0)) drugi++;
                      else drugi--;
+                     if(i + 1 == abs(poz.charAt(0) - stara_poz.charAt(0)) || i + 1 == abs(poz.charAt(1) - stara_poz.charAt(1))) break;
                 }
                 try {
                     tabla.get(index).move(position);
@@ -197,9 +199,54 @@ public class Board {
                     int doNothing;
                 }
 
-            } /*else if(type.isInstance(Queen)) {
+            } else if(type == Queen.class) {
+                int index = 0;
+                try {
+                    index = petljaZaTrazenjeFigure(Queen.class, poz, color);
+                } catch (IllegalChessMoveException izuz) {
+                    throw izuz;
+                }
+                String stara_poz = tabla.get(index).getPosition().toUpperCase();
+                //kraljica je spoj topa i lovca, uslovi od ta dva isombinirani
+                int prvi = 0, drugi =  0;
+                if(stara_poz.charAt(0) > poz.charAt(0) && stara_poz.charAt(1) < poz.charAt(1)) { prvi = -1; drugi = 1;}
+                else if(stara_poz.charAt(0) > poz.charAt(0) && stara_poz.charAt(1) > poz.charAt(1)) { prvi = -1; drugi = -1; }
+                else if(stara_poz.charAt(0) < poz.charAt(0) && stara_poz.charAt(1) < poz.charAt(1)) { prvi = 1; drugi = 1;}
+                else if(stara_poz.charAt(0) < poz.charAt(0) && stara_poz.charAt(1) > poz.charAt(1)){ prvi = 1; drugi = -1; }
+                else if(stara_poz.charAt(1) < poz.charAt(1)) { drugi = 1; }
+                else if(stara_poz.charAt(1) > poz.charAt(1)) { drugi = -1; }
+                else if(stara_poz.charAt(0) < poz.charAt(0)) { prvi = 1; }
+                else if(stara_poz.charAt(0) > poz.charAt(0)){ prvi = -1; }
+                vanjska :   for (int i = 0; i < 8; i++) {
+                    for (int j = 0; j < tabla.size(); j++) {
+                        String tmp = tabla.get(j).getPosition().toUpperCase();
+                        if (tmp.charAt(0) == stara_poz.charAt(0)+ prvi && tmp.charAt(1) == stara_poz.charAt(1) + drugi) {
+                            if (poz.equals(tmp) && tabla.get(j).getColor() != color) {
+                                tabla.remove(j);
+                                tabla.get(index).move(position);
+                                break vanjska;
+                            } else {
+                                throw new IllegalChessMoveException("Kraljica ne moze preskakati");
+                            }
+                        }
+                    }
+                    if(stara_poz.charAt(0) > poz.charAt(0) && stara_poz.charAt(1) < poz.charAt(1)) { prvi--; drugi++;}
+                    else if(stara_poz.charAt(0) > poz.charAt(0) && stara_poz.charAt(1) > poz.charAt(1)) { prvi--; drugi--; }
+                    else if(stara_poz.charAt(0) < poz.charAt(0) && stara_poz.charAt(1) < poz.charAt(1)) { prvi++; drugi++;}
+                    else if(stara_poz.charAt(0) < poz.charAt(0) && stara_poz.charAt(1) > poz.charAt(1)) { prvi++; drugi--; }
+                    else if(stara_poz.charAt(1) < poz.charAt(1))  drugi++;
+                    else if(stara_poz.charAt(1) > poz.charAt(1)) drugi--;
+                    else if(stara_poz.charAt(0) < poz.charAt(0)) prvi++;
+                    else if (stara_poz.charAt(0) > poz.charAt(0))prvi--;
+                    if(i + 1 == abs(poz.charAt(0) - stara_poz.charAt(0)) || i + 1 == abs(poz.charAt(1) - stara_poz.charAt(1))) break;
+                }
+                try {
+                    tabla.get(index).move(position);
+                } catch (IllegalChessMoveException izuz) {
+                    int doNothing;
+                }
 
-            } else if(type.isInstance(Pawn)) {
+            } /*else if(type.isInstance(Pawn)) {
 
             } */else {
             throw new IllegalArgumentException("Prvi parametar nije figura");
