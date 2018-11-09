@@ -4,6 +4,7 @@ package ba.unsa.etf.rpr;
 import java.util.ArrayList;
 
 import static ba.unsa.etf.rpr.Main.daLiJeIspravnaPozicija;
+import static java.lang.Math.abs;
 
 public class Board {
     private ArrayList<ChessPiece> tabla;
@@ -18,8 +19,8 @@ public class Board {
         tabla.add(new Bishop("F1", ChessPiece.Color.WHITE));
         tabla.add(new Knight("G1", ChessPiece.Color.WHITE));
         tabla.add(new Rook("H1", ChessPiece.Color.WHITE));
-        //tabla.add(new Pawn("A2", ChessPiece.Color.WHITE));
-        tabla.add(new Pawn("B2", ChessPiece.Color.WHITE));
+        tabla.add(new Pawn("A2", ChessPiece.Color.WHITE));
+        //tabla.add(new Pawn("B2", ChessPiece.Color.WHITE));
         tabla.add(new Pawn("C2", ChessPiece.Color.WHITE));
         tabla.add(new Pawn("D2", ChessPiece.Color.WHITE));
         tabla.add(new Pawn("E2", ChessPiece.Color.WHITE));
@@ -126,13 +127,16 @@ public class Board {
                 }
                 int limit = 0;
                 String stara_poz = tabla.get(index).getPosition().toUpperCase();
-                boolean postavljen = false;
-                if(stara_poz.charAt(0) > poz.charAt(0) && stara_poz.charAt(1) < poz.charAt(1)) { // uslovi za provjeru preskakanja
-                    int prvi = 1, drugi = 1;
+                int prvi, drugi;
+                if(stara_poz.charAt(0) > poz.charAt(0) && stara_poz.charAt(1) < poz.charAt(1)) { prvi = -1; drugi = 1;}
+                else if(stara_poz.charAt(0) > poz.charAt(0) && stara_poz.charAt(1) > poz.charAt(1)) { prvi = -1; drugi = -1; }
+                else if(stara_poz.charAt(0) < poz.charAt(0) && stara_poz.charAt(1) < poz.charAt(1)) { prvi = 1; drugi = 1;}
+                else { prvi = 1; drugi = -1; }
+                // uslovi za provjeru preskakanja, provjeravanje moze biti u 4 smjera pa po tome ova 4 ifa iznad
             vanjska :  while(true) {
                         for (int i = 0; i < tabla.size(); i++) {
                             String tmp = tabla.get(i).getPosition().toUpperCase();
-                            if (tmp.charAt(0) == (stara_poz.charAt(0) - prvi) && tmp.charAt(1) == (stara_poz.charAt(1) + drugi)) {
+                            if (tmp.charAt(0) == stara_poz.charAt(0) + prvi && tmp.charAt(1) == (stara_poz.charAt(1) + drugi)) {
                                 if (poz.equals(tmp) && tabla.get(i).getColor() != color) {
                                     tabla.get(index).move(position);
                                     tabla.remove(i);
@@ -142,64 +146,13 @@ public class Board {
                                 }
                             }
                         }
-                        prvi++; drugi++; limit++;
-                        if(limit > 8) break;
-                    }
-                } else if(stara_poz.charAt(0) > poz.charAt(0) && stara_poz.charAt(1) > poz.charAt(1)) {
-                    int prvi = 1, drugi = 1;
-                    vanjska :  while(true) {
-                        for (int i = 0; i < tabla.size(); i++) {
-                            String tmp = tabla.get(i).getPosition().toUpperCase();
-                            if (tmp.charAt(0) == stara_poz.charAt(0) - prvi && tmp.charAt(1) == stara_poz.charAt(1) - drugi) {
-                                if (poz.equals(tmp) && tabla.get(i).getColor() != color) {
-                                    tabla.get(index).move(position);
-                                    tabla.remove(i);
-                                    break vanjska;
-                                } else {
-                                    throw new IllegalChessMoveException("Lovac ne moze preskakati");
-                                }
-                            }
+                            if(stara_poz.charAt(0) > poz.charAt(0) && stara_poz.charAt(1) < poz.charAt(1)) { prvi--; drugi++;}
+                            else if(stara_poz.charAt(0) > poz.charAt(0) && stara_poz.charAt(1) > poz.charAt(1)) { prvi--; drugi--; }
+                            else if(stara_poz.charAt(0) < poz.charAt(0) && stara_poz.charAt(1) < poz.charAt(1)) { prvi++; drugi++;}
+                            else { prvi++; drugi--; }
+                            limit++;
+                            if(limit > abs(poz.charAt(0) - stara_poz.charAt(0))) break;
                         }
-                        prvi++; drugi++; limit++;
-                        if(limit > 8) break;
-                    }
-                } else if(stara_poz.charAt(0) < poz.charAt(0) && stara_poz.charAt(1) < poz.charAt(1)) {
-                    int prvi = 1, drugi = 1;
-                    vanjska :  while(true) {
-                        for (int i = 0; i < tabla.size(); i++) {
-                            String tmp = tabla.get(i).getPosition().toUpperCase();
-                            if (tmp.charAt(0) == stara_poz.charAt(0) + prvi && tmp.charAt(1) == stara_poz.charAt(1) + drugi) {
-                                if (poz.equals(tmp) && tabla.get(i).getColor() != color) {
-                                    tabla.get(index).move(position);
-                                    tabla.remove(i);
-                                    break vanjska;
-                                } else {
-                                    throw new IllegalChessMoveException("Lovac ne moze preskakati");
-                                }
-                            }
-                        }
-                        prvi++; drugi++; limit++;
-                        if(limit > 8) break;
-                    }
-                } else if(stara_poz.charAt(0) < poz.charAt(0) && stara_poz.charAt(1) > poz.charAt(1)) {
-                    int prvi = 1, drugi = 1;
-                    vanjska :  while(true) {
-                        for (int i = 0; i < tabla.size(); i++) {
-                            String tmp = tabla.get(i).getPosition().toUpperCase();
-                            if (tmp.charAt(0) == stara_poz.charAt(0) + prvi && tmp.charAt(1) == stara_poz.charAt(1) - drugi) {
-                                if (poz.equals(tmp) && tabla.get(i).getColor() != color) {
-                                    tabla.get(index).move(position);
-                                    tabla.remove(i);
-                                    break vanjska;
-                                } else {
-                                    throw new IllegalChessMoveException("Lovac ne moze preskakati");
-                                }
-                            }
-                        }
-                        prvi++; drugi++; limit++;
-                        if(limit > 8) break;
-                    }
-                }
                 try {
                     tabla.get(index).move(position);
                 } catch (IllegalChessMoveException izuz) {
@@ -219,11 +172,11 @@ public class Board {
                 else if(stara_poz.charAt(1) > poz.charAt(1)) { prvi = -1; drugi = 0; }
                 else if(stara_poz.charAt(0) < poz.charAt(0)) { prvi = 0; drugi = 1;}
                 else { prvi = 0; drugi = -1; }
-                if(stara_poz.charAt(0) == poz.charAt(0)) { // ako je slovo pozicije jednako trazimo figure po brojevima
+                // ako je slovo pozicije jednako trazimo figure po brojevima
                  vanjska :   for (int i = 0; i < 8; i++) {
                         for (int j = 0; j < tabla.size(); j++) {
                             String tmp = tabla.get(j).getPosition().toUpperCase();
-                            if (tmp.charAt(0) == stara_poz.charAt(0) && tmp.charAt(1) == stara_poz.charAt(1) + prvi) {
+                            if (tmp.charAt(0) == stara_poz.charAt(0)+ drugi && tmp.charAt(1) == stara_poz.charAt(1) + prvi) {
                                 if (poz.equals(tmp) && tabla.get(j).getColor() != color) {
                                     tabla.get(index).move(position);
                                     tabla.remove(j);
@@ -235,25 +188,8 @@ public class Board {
                         }
                      if(stara_poz.charAt(1) < poz.charAt(1))  prvi++;
                      else if(stara_poz.charAt(1) > poz.charAt(1)) prvi--;
-
-                    }
-                } else {
-                    vanjska :   for (int i = 0; i < 8; i++) {
-                        for (int j = 0; j < tabla.size(); j++) {
-                            String tmp = tabla.get(j).getPosition().toUpperCase();
-                            if (tmp.charAt(0) == stara_poz.charAt(0) + drugi && tmp.charAt(1) == stara_poz.charAt(1)) {
-                                if (poz.equals(tmp) && tabla.get(j).getColor() != color) {
-                                    tabla.get(index).move(position);
-                                    tabla.remove(j);
-                                    break vanjska;
-                                } else {
-                                    throw new IllegalChessMoveException("Top ne moze preskakati");
-                                }
-                            }
-                        }
-                        if(stara_poz.charAt(0) < poz.charAt(0)) drugi++;
-                        else drugi--;
-                    }
+                     else if(stara_poz.charAt(0) < poz.charAt(0)) drugi++;
+                     else drugi--;
                 }
                 try {
                     tabla.get(index).move(position);

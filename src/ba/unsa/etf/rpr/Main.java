@@ -25,10 +25,11 @@ public class Main {
             konj.move("e6");
             lovac.move("C3");
             pijun.move("E6");*/
-           tabla.move(Rook.class, ChessPiece.Color.WHITE,"a7");
-           tabla.move(Rook.class, ChessPiece.Color.WHITE,"b7");
-           tabla.move(Rook.class, ChessPiece.Color.WHITE,"a7");
-           tabla.move(Rook.class, ChessPiece.Color.WHITE,"a8");
+           tabla.move(Bishop.class, ChessPiece.Color.WHITE,"A3");
+           tabla.move(Bishop.class, ChessPiece.Color.WHITE,"e7");
+           tabla.move(Bishop.class, ChessPiece.Color.WHITE,"f6");
+           tabla.move(Bishop.class, ChessPiece.Color.WHITE,"e5");
+           tabla.move(Bishop.class, ChessPiece.Color.WHITE,"c7");
         } catch (IllegalChessMoveException izuzetak) {
             System.out.print(izuzetak.getMessage());
         }
