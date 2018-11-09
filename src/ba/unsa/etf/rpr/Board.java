@@ -22,7 +22,7 @@ public class Board {
         tabla.add(new Pawn("A2", ChessPiece.Color.WHITE));
         tabla.add(new Pawn("B2", ChessPiece.Color.WHITE));
         tabla.add(new Pawn("C2", ChessPiece.Color.WHITE));
-        //tabla.add(new Pawn("D2", ChessPiece.Color.WHITE));
+        tabla.add(new Pawn("D2", ChessPiece.Color.WHITE));
         tabla.add(new Pawn("E2", ChessPiece.Color.WHITE));
         tabla.add(new Pawn("F2", ChessPiece.Color.WHITE));
         tabla.add(new Pawn("G2", ChessPiece.Color.WHITE));
@@ -30,7 +30,7 @@ public class Board {
         tabla.add(new Rook("A8", ChessPiece.Color.BLACK));
         tabla.add(new Knight("B8", ChessPiece.Color.BLACK));
         tabla.add(new Bishop("C8", ChessPiece.Color.BLACK));
-        tabla.add(new Queen("D8", ChessPiece.Color.BLACK));
+        tabla.add(new Queen("B3", ChessPiece.Color.BLACK));
         tabla.add(new King("E8", ChessPiece.Color.BLACK));
         tabla.add(new Bishop("F8", ChessPiece.Color.BLACK));
         tabla.add(new Knight("G8", ChessPiece.Color.BLACK));
@@ -246,30 +246,132 @@ public class Board {
                     int doNothing;
                 }
 
-            } /*else if(type.isInstance(Pawn)) {
-
-            } */else {
+            } else if(type == Pawn.class) {
+                int index = 0;
+                try {
+                    index = petljaZaTrazenjeFigure(Pawn.class, poz, color);
+                } catch (IllegalChessMoveException izuz) {
+                    throw izuz;
+                }
+                // nasli smo da postoji pijun za ovaj potez sada ide postupak da li ga jest ili samo pomjeriti
+                int indx_za_izbacit = 0;
+                for(int i = 0; i < tabla.size(); i++) {
+                    String tmp = tabla.get(i).getPosition().toUpperCase();
+                    if(poz.equals(tmp) && tabla.get(i).getColor() == color) throw new IllegalChessMoveException("Nelegalan potez");
+                    else if (poz.equals(tmp)) {
+                        indx_za_izbacit = i;
+                        break;
+                    }
+                }
+                boolean da_li_jede = false;
+                try {
+                    Pawn tmpPijun = (Pawn) tabla.get(index).dajKopiju();
+                    tmpPijun.jedi(tabla.get(indx_za_izbacit).getPosition());
+                    da_li_jede = true;
+                } catch(IllegalChessMoveException iz) {
+                    int doNothing;
+                }
+                if(da_li_jede) {
+                    Pawn tmp = (Pawn)tabla.get(index);
+                    tmp.jedi(position);
+                    tabla.remove(indx_za_izbacit);
+                }
+                else {
+                    tabla.get(index).move(position);
+                }
+            } else {
             throw new IllegalArgumentException("Prvi parametar nije figura");
         }
     }
 
-    int petljaZaTrazenjeFigure(Class<?> figura, String position, ChessPiece.Color color) throws IllegalChessMoveException {
-        boolean pronadjen = false; int index_pronadjenog = 0;
-     vanjska :   for(int i = 0; i < tabla.size(); i++) {
-            if (figura.isInstance(tabla.get(i))&& tabla.get(i).getColor() == color) {
+    public boolean isCheck(ChessPiece.Color color) {
+        return false;
+    }
+
+    public void move(String oldPosition, String newPosition) throws IllegalChessMoveException {
+        String stara = oldPosition.toUpperCase();
+        boolean ima_stara = false;
+        for(int i = 0; i < tabla.size(); i++) {
+            String tmp = tabla.get(i).getPosition().toUpperCase();
+            if(stara.equals(tmp)) {
                 try {
-                    String restore = tabla.get(i).getPosition();
-                    tabla.get(i).move(position);
-                    tabla.get(i).move(restore);
-                    pronadjen = true; index_pronadjenog = i;
-                    break vanjska;
-                } catch(IllegalChessMoveException izuz) {
-                    pronadjen = false;
+                    this.move(tabla.get(i).getClass(), tabla.get(i).getColor(), newPosition);
+                    ima_stara = true;
+                    break;
+                } catch (IllegalChessMoveException iz) {
+                    throw iz;
                 }
             }
         }
-        if(pronadjen) return index_pronadjenog;
-        else throw new IllegalChessMoveException("Ne moze se povuci taj potez ni za jednu figuru");
+        if(!ima_stara) throw new IllegalChessMoveException("Illegal move");
+    }
+
+    private int petljaZaTrazenjeFigure(Class<?> figura, String position, ChessPiece.Color color) throws IllegalChessMoveException {
+        if(figura == Pawn.class) {
+            boolean pronadjen = false, pronadjen_za_jelo = false;
+            int index_zajelo = 0, index_pronadjenog = 0;
+            String novi = position.toUpperCase();
+            for(int i = 0; i < tabla.size(); i++) {
+                String tmp = tabla.get(i).getPosition().toUpperCase();
+                if(tmp.equals(novi)) {
+                    index_zajelo = i;
+                    pronadjen_za_jelo = true;
+                }
+            }
+            if(pronadjen_za_jelo) {
+                String tmp = tabla.get(index_zajelo).getPosition().toUpperCase();
+                for (int i = 0; i < tabla.size(); i++) {
+                    if (tabla.get(i).getClass() == Pawn.class){
+                        Pawn tmpPijun = (Pawn) tabla.get(i).dajKopiju();
+                        try {
+                            tmpPijun.jedi(tmp);
+                            pronadjen = true;
+                            index_pronadjenog = i;
+                            break;
+                        } catch (IllegalChessMoveException iz) {
+                            int doNothing;
+                        }
+                    }
+                }
+            }
+            if(!pronadjen) {
+                for(int i = 0; i < tabla.size(); i++) {
+                    if (tabla.get(i).getClass() == Pawn.class) {
+                        Pawn tmpPijun = (Pawn) tabla.get(i).dajKopiju();
+                        try {
+                            tmpPijun.move(position);
+                            pronadjen = true;
+                            index_pronadjenog = i;
+                            break;
+                        } catch (IllegalChessMoveException iz) {
+                            int doNothing;
+                        }
+                    }
+                }
+            }
+            if(pronadjen) return index_pronadjenog;
+            else throw new IllegalChessMoveException("Ne moze se povuci taj potez ni za jednu figuru");
+        } else {
+            boolean pronadjen = false;
+            int index_pronadjenog = 0;
+            vanjska:
+            for (int i = 0; i < tabla.size(); i++) {
+                if (figura.isInstance(tabla.get(i)) && tabla.get(i).getColor() == color) {
+                    try {
+                        String restore = tabla.get(i).getPosition();
+                        tabla.get(i).move(position);
+                        tabla.get(i).move(restore);
+                        pronadjen = true;
+                        index_pronadjenog = i;
+                        break vanjska;
+                    } catch (IllegalChessMoveException izuz) {
+                        pronadjen = false;
+                    }
+                }
+            }
+            if (pronadjen) return index_pronadjenog;
+            else throw new IllegalChessMoveException("Ne moze se povuci taj potez ni za jednu figuru");
+        }
     }
 
 }

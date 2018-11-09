@@ -16,4 +16,7 @@ public class Bishop extends ChessPiece {
         pozicija = position;
         return true;
     }
+    public Object dajKopiju(){
+        return new Bishop(pozicija,boja);
+    }
 }

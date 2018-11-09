@@ -17,4 +17,7 @@ public class Knight extends ChessPiece {
         pozicija = position;
         return true;
     }
+    public Object dajKopiju(){
+        return new Knight(pozicija,boja);
+    }
 }

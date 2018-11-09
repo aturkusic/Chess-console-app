@@ -17,4 +17,7 @@ public class King extends ChessPiece{
         pozicija = position;
         return true;
     }
+    public Object dajKopiju(){
+        return new King(pozicija,boja);
+    }
 }

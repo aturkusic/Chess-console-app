@@ -17,23 +17,23 @@ public class Main {
       // Queen kraljica = new Queen("D4", ChessPiece.Color.BLACK);
         //Knight konj = new Knight("B1", ChessPiece.Color.BLACK);
         //Bishop lovac = new Bishop("E5", ChessPiece.Color.WHITE);
-        //ChessPiece pijun = new Pawn("e7", ChessPiece.Color.BLACK);
+        //Pawn pijun = new Pawn("e5", ChessPiece.Color.WHITE);
          Board tabla = new Board();
         try {
             /*kraljica.move("d5");
             kralj.move("h4");
             konj.move("e6");
             lovac.move("C3");
-            pijun.move("E6");*/
-           tabla.move(Queen.class, ChessPiece.Color.WHITE,"D7");
-           tabla.move(Queen.class, ChessPiece.Color.WHITE,"E7");
+            pijun.jedi("e6");*/
+           tabla.move(Pawn.class, ChessPiece.Color.WHITE,"B3");
+           /*tabla.move(Queen.class, ChessPiece.Color.WHITE,"E7");
            tabla.move(Queen.class, ChessPiece.Color.WHITE,"e3");
            tabla.move(Queen.class, ChessPiece.Color.WHITE,"a7");
-           tabla.move(Queen.class, ChessPiece.Color.WHITE,"b8");
+           tabla.move(Queen.class, ChessPiece.Color.WHITE,"b8");*/
         } catch (IllegalChessMoveException izuzetak) {
             System.out.print(izuzetak.getMessage());
         }
-        //System.out.print(kralj.getPosition() + " " + kraljica.getPosition() + " " + konj.getPosition()+ " " + lovac.getPosition()+ " " + pijun.getPosition());
+       // System.out.print(kralj.getPosition() + " " + kraljica.getPosition() + " " + konj.getPosition()+ " " + lovac.getPosition()+ " " + pijun.getPosition());
 
      }
 }

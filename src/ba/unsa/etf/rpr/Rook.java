@@ -16,4 +16,7 @@ public class Rook extends ChessPiece {
         pozicija = position;
         return true;
     }
+    public Object dajKopiju(){
+        return new Rook(pozicija,boja);
+    }
 }

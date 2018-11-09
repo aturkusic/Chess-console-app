@@ -13,4 +13,5 @@ public abstract class ChessPiece {
     public String getPosition() { return pozicija; }
     public Color getColor() { return boja; }
     public abstract boolean move(String position) throws IllegalChessMoveException;
+    public abstract Object dajKopiju();
 }

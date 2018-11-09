@@ -19,4 +19,7 @@ public class Queen extends ChessPiece {
         pozicija = position;
         return true;
     }
+    public Object dajKopiju(){
+        return new Queen(pozicija,boja);
+    }
 }

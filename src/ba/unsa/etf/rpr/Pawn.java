@@ -32,4 +32,25 @@ public class Pawn extends ChessPiece{
         pozicija = position;
         return true;
     }
+
+    public void jedi(String position) throws IllegalChessMoveException {
+        String tmp = position.toUpperCase();
+        String pozTmp = pozicija.toUpperCase();
+        if (!daLiJeIspravnaPozicija(position)) throw new IllegalArgumentException("Nepostojeca pozicija");
+        if (tmp.equals(pozTmp)) throw new IllegalChessMoveException("Niste nista pomjerili");
+        else {
+            if(boja == Color.BLACK) {
+                if (!(pozTmp.charAt(0) + 1 == tmp.charAt(0) && pozTmp.charAt(1) - 1 == tmp.charAt(1)) &&
+                        !(pozTmp.charAt(0) - 1 == tmp.charAt(0) && pozTmp.charAt(1) - 1 == tmp.charAt(1))) throw new IllegalChessMoveException("Pijun ne moze tu jesti");
+            } else {
+                if (!(pozTmp.charAt(0) + 1 == tmp.charAt(0) && pozTmp.charAt(1) + 1 == tmp.charAt(1)) &&
+                        !(pozTmp.charAt(0) - 1 == tmp.charAt(0) && pozTmp.charAt(1) + 1 == tmp.charAt(1))) throw new IllegalChessMoveException("Pijun ne moze tu jesti");
+            }
+        }
+        pozicija = position;
+    }
+
+    public Object dajKopiju(){
+        return new Pawn(pozicija,boja);
+    }
 }
