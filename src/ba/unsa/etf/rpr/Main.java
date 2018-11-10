@@ -13,23 +13,13 @@ public class Main {
          return true;
      }
      public static void main(String[] args) {
-        //King kralj = new King("E1", ChessPiece.Color.WHITE);
-      // Queen kraljica = new Queen("D4", ChessPiece.Color.BLACK);
-        //Knight konj = new Knight("B1", ChessPiece.Color.BLACK);
-        //Bishop lovac = new Bishop("E5", ChessPiece.Color.WHITE);
-        //Pawn pijun = new Pawn("e5", ChessPiece.Color.WHITE);
-         Board tabla = new Board();
+         Board b = new Board();
         try {
-            /*kraljica.move("d5");
-            kralj.move("h4");
-            konj.move("e6");
-            lovac.move("C3");
-            pijun.jedi("e6");*/
-           tabla.move(Pawn.class, ChessPiece.Color.WHITE,"B3");
-           /*tabla.move(Queen.class, ChessPiece.Color.WHITE,"E7");
-           tabla.move(Queen.class, ChessPiece.Color.WHITE,"e3");
-           tabla.move(Queen.class, ChessPiece.Color.WHITE,"a7");
-           tabla.move(Queen.class, ChessPiece.Color.WHITE,"b8");*/
+            b.move("E2", "E4");
+            b.move("E4", "E5");
+            b.move("E5", "E6");
+            b.move("E6", "D7");
+            System.out.print(b.isCheck(ChessPiece.Color.BLACK));
         } catch (IllegalChessMoveException izuzetak) {
             System.out.print(izuzetak.getMessage());
         }

@@ -30,7 +30,7 @@ public class Board {
         tabla.add(new Rook("A8", ChessPiece.Color.BLACK));
         tabla.add(new Knight("B8", ChessPiece.Color.BLACK));
         tabla.add(new Bishop("C8", ChessPiece.Color.BLACK));
-        tabla.add(new Queen("B3", ChessPiece.Color.BLACK));
+        tabla.add(new Queen("D8", ChessPiece.Color.BLACK));
         tabla.add(new King("E8", ChessPiece.Color.BLACK));
         tabla.add(new Bishop("F8", ChessPiece.Color.BLACK));
         tabla.add(new Knight("G8", ChessPiece.Color.BLACK));
@@ -48,7 +48,20 @@ public class Board {
     public void move(Class type, ChessPiece.Color color, String position) throws IllegalChessMoveException {
         String poz = position.toUpperCase();
             if(type == King.class) {
-                boolean pronadjen = false;
+                int index = 0;
+                try {
+                    index = petljaZaTrazenjeFigure(King.class, poz, color);
+                } catch (IllegalChessMoveException izuz) {
+                    throw izuz;
+                }
+                for(int i = 0; i < tabla.size(); i++) {
+                    String tmp = tabla.get(i).getPosition().toUpperCase();
+                    if(poz.equals(tmp) && tabla.get(i).getColor() == color) throw new IllegalChessMoveException("Nelegalan potez");
+                    else if (poz.equals(tmp)) {
+                        break;
+                    }
+                }
+               /* boolean pronadjen = false;
                 for(int i = 0; i < tabla.size(); i++) { // trazimo da li ima figura na novoj poziciji, zatim da li je potez leglan i konacno da li izbacujemo figuru sa tog mjesta ili izuzetak
                     String stara_poz = tabla.get(i).getPosition().toUpperCase();
                     if (stara_poz.equals(poz)) {
@@ -81,7 +94,7 @@ public class Board {
                     } catch (IllegalChessMoveException izuz) {
                         throw izuz;
                     }
-                }
+                }*/
             } else if(type == Knight.class) {
             boolean pronadjen = false;
             for(int i = 0; i < tabla.size(); i++) { // trazimo da li ima figura na novoj poziciji, zatim da li je potez leglan i konacno da li izbacujemo figuru sa tog mjesta ili izuzetak
@@ -285,6 +298,47 @@ public class Board {
     }
 
     public boolean isCheck(ChessPiece.Color color) {
+        String pozicija_kralja = "abc";
+        Board tabla1 = this.dajKopiju();
+        int index = 0;
+        for(int i = 0; i < tabla1.tabla.size(); i++) {
+            if(tabla1.tabla.get(i).getClass() == King.class && tabla1.tabla.get(i).getColor() == color) {
+                tabla1.tabla.add(i, new King(tabla1.tabla.get(i).getPosition(), color));
+                pozicija_kralja = tabla1.tabla.get(i).getPosition().toUpperCase();
+                index = i;
+                break;
+            }
+        }
+
+        boolean pojeo = false;
+        for(int i = 0; i < tabla1.tabla.size(); i++) {
+            try {
+                ChessPiece tmp = (ChessPiece) tabla1.tabla.get(i).dajKopiju();
+                if(tmp.getClass() == Pawn.class) {
+                    Pawn pijun = (Pawn)tmp.dajKopiju();
+                    try {
+                        pijun.jedi(pozicija_kralja);
+                        tabla1.tabla.remove(index);
+                        pojeo = true;
+                        break;
+                    } catch(IllegalChessMoveException iz) {
+                        int doNothing;
+                    }
+                }
+                if(!pojeo)
+                    tabla1.move(tmp.getPosition(), pozicija_kralja);
+                tabla1.tabla.remove(index);
+                break;
+            } catch(IllegalChessMoveException iz) {
+                int doNothing;
+            }
+
+        }
+        int brojac = 0;
+        for(int i = 0; i < tabla1.tabla.size(); i++) {
+            if(tabla1.tabla.get(i).getClass() == King.class && tabla1.tabla.get(i).getColor() == color) brojac++;
+        }
+        if(brojac == 1) return true;
         return false;
     }
 
@@ -304,6 +358,15 @@ public class Board {
             }
         }
         if(!ima_stara) throw new IllegalChessMoveException("Illegal move");
+    }
+
+    public Board dajKopiju() {
+        Board tablaVratit = new Board();
+        tablaVratit.tabla.clear();
+        for(int i = 0; i < tabla.size(); i++) {
+            tablaVratit.tabla.add((ChessPiece) tabla.get(i).dajKopiju());
+        }
+        return tablaVratit;
     }
 
     private int petljaZaTrazenjeFigure(Class<?> figura, String position, ChessPiece.Color color) throws IllegalChessMoveException {
