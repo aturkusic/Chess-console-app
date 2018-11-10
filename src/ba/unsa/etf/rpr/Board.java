@@ -3,7 +3,6 @@ package ba.unsa.etf.rpr;
 
 import java.util.ArrayList;
 
-import static ba.unsa.etf.rpr.Main.daLiJeIspravnaPozicija;
 import static java.lang.Math.abs;
 
 public class Board {

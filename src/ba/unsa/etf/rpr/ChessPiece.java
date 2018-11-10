@@ -1,6 +1,6 @@
 package ba.unsa.etf.rpr;
 
-import static ba.unsa.etf.rpr.Main.daLiJeIspravnaPozicija;
+import static ba.unsa.etf.rpr.Program.daLiJeIspravnaPozicija;
 
 public abstract class ChessPiece {
     protected String pozicija;

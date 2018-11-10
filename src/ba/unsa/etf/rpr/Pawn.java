@@ -1,6 +1,6 @@
 package ba.unsa.etf.rpr;
 
-import static ba.unsa.etf.rpr.Main.daLiJeIspravnaPozicija;
+import static ba.unsa.etf.rpr.Program.daLiJeIspravnaPozicija;
 import static java.lang.Math.abs;
 
 public class Pawn extends ChessPiece{
