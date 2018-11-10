@@ -117,7 +117,7 @@ public class Board {
                                     tabla.get(index).move(position);
                                     tabla.remove(i);
                                     break vanjska;
-                                } else {
+                                } else  {
                                     throw new IllegalChessMoveException("Lovac ne moze preskakati");
                                 }
                             }
