@@ -12,6 +12,6 @@ public abstract class ChessPiece {
     public static enum Color{BLACK, WHITE}
     public String getPosition() { return pozicija; }
     public Color getColor() { return boja; }
-    public abstract boolean move(String position) throws IllegalChessMoveException;
+    public abstract void move(String position) throws IllegalChessMoveException;
     public abstract Object dajKopiju();
 }

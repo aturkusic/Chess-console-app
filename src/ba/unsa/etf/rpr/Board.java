@@ -301,9 +301,6 @@ public class Board {
         return false;
     }
 
-
-
-
     public Board dajKopiju() {
         Board tablaVratit = new Board();
         tablaVratit.tabla.clear();

@@ -19,7 +19,7 @@ public class Program {
          String unos = "heh";
          ChessPiece.Color boja;
          int brojac = 0;
-         while(!unos.equals("X")) {
+         while(!unos.equals("X") && !unos.equals("x")) {
              if(brojac%2 == 1) System.out.print("Black move: ");
              else System.out.print("White move: ");
              if(brojac%2 == 1) boja = ChessPiece.Color.BLACK;
@@ -29,41 +29,49 @@ public class Program {
                  try {
                      b.move(King.class, boja, unos.substring(1));
                  } catch (IllegalChessMoveException iz) {
-                     System.out.print("Unesite ispravnu poziciju");
+                     System.out.print("Illegal move");
+                     brojac--;
                  }
              } else if(unos.charAt(0) == 'Q') {
                  try {
                      b.move(Queen.class, boja, unos.substring(1));
                  } catch (IllegalChessMoveException iz) {
-                     System.out.print("Unesite ispravnu poziciju");
+                     System.out.print("Illegal move");
+                     brojac--;
                  }
              } else if(unos.charAt(0) == 'R') {
                  try {
                      b.move(Rook.class, boja, unos.substring(1));
                  } catch (IllegalChessMoveException iz) {
-                     System.out.print("Unesite ispravnu poziciju");
+                     System.out.print("Illegal move");
+                     brojac--;
                  }
              } else if(unos.charAt(0) == 'B') {
                  try {
                      b.move(Bishop.class, boja, unos.substring(1));
                  } catch (IllegalChessMoveException iz) {
-                     System.out.print("Unesite ispravnu poziciju");
+                     System.out.print("Illegal move");
+                     brojac--;
                  }
              } else if(unos.charAt(0) == 'N') {
                  try {
                      b.move(Knight.class, boja, unos.substring(1));
                  } catch (IllegalChessMoveException iz) {
-                     System.out.print("Unesite ispravnu poziciju");
+                     System.out.print("Illegal move");
+                     brojac--;
                  }
              } else if(unos.length() == 2) {
                  try {
                      b.move(Pawn.class, boja, unos);
                  } catch (IllegalChessMoveException iz) {
-                     System.out.print("Unesite ispravnu poziciju");
+                     System.out.print("Illegal move");
+                     brojac--;
                  }
              } else {
-                 System.out.print("Molimo unesite ponovo: \n");
-                 brojac--;
+                 if(!unos.equals("X") && !unos.equals("x")) {
+                     System.out.print("Illegal move\n");
+                     brojac--;
+                 }
              }
              if(brojac%2 == 1) {
                  if (b.isCheck(ChessPiece.Color.WHITE)) System.out.print("CHECK!!!");
